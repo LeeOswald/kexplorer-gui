@@ -32,6 +32,18 @@ else()
     endif()
 endif()
 
+set(KX_LINUX 0)
+set(KX_WINDOWS 0)
+
+if(WIN32)
+    set(KX_WINDOWS 1)
+elseif(UNIX AND NOT APPLE)
+    set(KX_LINUX 1)
+else()
+    message(FATAL_ERROR "Unsupported OS")
+endif()
+
+
 if(MSVC)
 else()
     add_link_options(-rdynamic) # enable stack capture
@@ -47,21 +59,21 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 # Qt6Widgets_INCLUDES also includes the include directories for QtCore and QtGui
-include_directories(${Qt6Widgets_INCLUDES} ${Qt6Network_INCLUDES})
+include_directories(${Qt6Widgets_INCLUDES})
 # We need to add -DQT_WIDGETS_LIB when using QtWidgets in Qt 6
-add_definitions(${Qt6Widgets_DEFINITIONS} ${Qt6Network_DEFINITIONS})
+add_definitions(${Qt6Widgets_DEFINITIONS})
 
-# require pthreads
-find_package(Threads REQUIRED)
-set(PLATFORM_LIBRARIES Threads::Threads)
+if(KX_LINUX)
+    # require pthreads
+    find_package(Threads REQUIRED)
+    set(PLATFORM_LIBRARIES Threads::Threads)
+endif()
 
 # require Boost
 find_package(Boost REQUIRED COMPONENTS system program_options)
 
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
-
-set(BOOST_LIBRARIES Boost::program_options)
 
 if(WIN32)
     # disable autolinking in boost
@@ -81,16 +93,6 @@ if(WIN32)
     add_definitions(-D_WIN32_WINNT=0x0601)
 endif()
 
-set(KX_LINUX 0)
-set(KX_WINDOWS 0)
-
-if(WIN32)
-    set(KX_WINDOWS 1)
-elseif(UNIX AND NOT APPLE)
-    set(KX_LINUX 1)
-else()
-    message(FATAL_ERROR "Unsupported OS")
-endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/kexplorer-version.h.in kexplorer-version.h)
 
@@ -102,5 +104,6 @@ include_directories(${PROJECT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CU
 set(KX_CLIENTLIB kxclient)
 set(KX_APP kexplorer)
 
-add_subdirectory(src/kxclient)
+add_subdirectory(submodules/kexplorer-server)
+#add_subdirectory(src/kxclient)
 add_subdirectory(src/kexplorer)
