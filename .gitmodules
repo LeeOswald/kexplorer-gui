@@ -1,3 +1,0 @@
-[submodule "kexplorer-server"]
-	path = submodules/kexplorer-server
-	url = https://github.com/LeeOswald/kexplorer-server.git
