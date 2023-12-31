@@ -1,9 +1,12 @@
 #include "kexplorer-version.h"
 
+#include "logger.hpp"
+#include "settings.hpp"
+
 #include <QCoreApplication>
 #include <QMessageBox>
 
-#if defined(_MSC_VER) && defined(_DEBUG)
+#if defined(_MSC_VER) && KX_DEBUG
 #include <crtdbg.h>
 #endif
 
@@ -11,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-#if defined(_MSC_VER) && defined(_DEBUG)
+#if defined(_MSC_VER) && KX_DEBUG
     int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
     tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
     _CrtSetDbgFlag(tmpFlag);
@@ -21,6 +24,10 @@ int main(int argc, char *argv[])
     a.setApplicationName(KX_APPLICATION_NAME);
     a.setApplicationVersion(QString("%1.%2.%3").arg(KX_VERSION_MAJOR).arg(KX_VERSION_MINOR).arg(KX_VERSION_PATCH));
     a.setOrganizationName(KX_ORGANIZATION_NAME);
+
+    Settings settings;
+    auto logLevel = static_cast<Kx::Log::Level>(Kx::Option<int>::get(&settings, "log/level", int(Kx::Log::Level::Off)));
+    Logger logger(logLevel);
 
     try
     {

@@ -1,6 +1,10 @@
 
 set(SOURCES
+    logger.cpp
+    logger.hpp
     main.cpp
+    settings.cpp
+    settings.hpp
 )
 
 set(RESOURCES

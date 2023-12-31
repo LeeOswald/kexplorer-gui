@@ -97,7 +97,7 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/kexplorer-version.h.in kexplorer-version.h)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-include_directories(${PROJECT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/submodules/kexporer-server/include ${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/submodules/kexplorer-server/include ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 
 
